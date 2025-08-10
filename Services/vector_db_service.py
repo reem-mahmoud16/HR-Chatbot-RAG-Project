@@ -8,6 +8,9 @@ class IVectorDBService(ABC):
     def initialize_collection(self, document_path: str, collection_name: str):
         pass
     
+    @abstractmethod
+    def query(self, query_embedding, n_results: int = 5):
+        pass
 
 class ChromaDBService(IVectorDBService):
     def __init__(self, embedding_service):
@@ -36,3 +39,9 @@ class ChromaDBService(IVectorDBService):
             )
         
         return self.collection
+
+    def query(self, query_embedding, n_results: int = 5):
+        return self.collection.query(
+            query_embeddings=[query_embedding],
+            n_results=n_results
+        )
